@@ -9,20 +9,31 @@ import miner
 import bitcoin
 
 def get_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="This is the simulator of Blockchain consensus protocol.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument("-p", "--protocol", 
-            help="simulate the specified consensus protocol. (default='bitcoin')", 
-            type=str, choices=["bitcoin", "fair"], default="bitcoin")
+        help="simulate the specified consensus protocol.", 
+        type=str, 
+        choices=["bitcoin", "fair"],
+        default="bitcoin")
     parser.add_argument("-n", "--number", 
-            help="simulate the number of miners. (default=1000)", 
-            type=int, default=1000)
+        help="simulate the number of miners.", 
+        type=int,
+        default=1000)
     parser.add_argument("-e", "--episode",
-            help="simulate the number of episode. (default=1)",
-            type=int, default=1)
+        help="simulate the number of episode.",
+        type=int, 
+        default=1)
     parser.add_argument("-m", "--month",
-            help="simulate the specified time. Unit is month. (default=12)",
-            type=int, default=12)
+        help="simulate the specified time. Unit is month.",
+        type=int, 
+        default=12)
+    parser.add_argument("-l", "--load",
+        help="load simulated log file",
+        type=str,
+        metavar="DATA_FILE.csv")
 
     args = parser.parse_args()
 

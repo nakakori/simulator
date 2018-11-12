@@ -3,7 +3,36 @@
 import numpy as np
 from scipy.stats import poisson
 
+import blockchain
+
 # Simulation of Proof-of-Work
+class Bitcoin(blockchain.Consensus):
+    def __init__(self):
+        pass
+
+    def run(self, miners):
+        self.phase1()
+        self.phase2()
+        self.phase3()
+
+    # マイニングに参加するかどうかの決定
+    # マイナー同士で協力するかどうかをそれぞれで決定
+    @staticmethod
+    def phase1():
+        pass
+
+    # マイニングシミュレーション
+    # ブロックの作成・同期
+    @staticmethod
+    def phase2():
+        pass
+    
+    # 各種パラメータの変動
+    # ブロック数が2016毎に難易度を調整(ビットコインの場合)
+    # 次のマイニングに参加するかどうかの確率の変更？
+    @staticmethod
+    def phase3():
+        pass
 
 # simulation mining function
 def mining(hashrate, difficulty=1):

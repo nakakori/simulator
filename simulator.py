@@ -1,23 +1,26 @@
 import csv
 import time
+import logging
+import logging.config
 
 import numpy as np
 
 import blockchain
+import bitcoin
+import fair
 
 class Simulator():
-    def __init__(self, miner_num, eps, protocol):
+    def __init__(self, miner_num, block_num, protocol):
         self.blockchain = None
         self.miners = []
-        self.config = {"num": miner_num, "episode": eps, "protocol": protocol}
+        self.protocol = None
+        self.config = {"miner_num": miner_num, "blocks": block_num, "protocol": protocol}
 
     def run(self):
         self.init_simulator(self)
 
-        for _ in range(self.config["episode"]):
-            self.phase1()
-            self.phase2()
-            self.phase3()
+        for _ in range(self.config["block_num"]):
+            self.protocol.run(self.miners)
 
         self.end_simulator(self)
 
@@ -26,8 +29,9 @@ class Simulator():
     def init_simulator(self):
         # Initialization of blockchain
         self.blockchain = blockchain.Blockchain()
+
         # Initialization of miner
-        for i in range(self.config["num"]):
+        for i in range(self.config["miner_num"]):
             hr = -1
             while hr < 0:
                 #TODO この正規分布のパラメータもコンフィグで設定できるようにする
@@ -35,24 +39,25 @@ class Simulator():
             self.miners.append(blockchain.Miner(
                 id=i, hashrate=hr, blockchain=self.blockchain))
 
+        # Initialization of consensus protocol
+        if self.config.protocol == "bitcoin":
+            self.protocol = bitcoin.Bitcoin()
+        elif self.config.protocol == "fair":
+            self.protocol = fair.Fair_PoW()
+
         # Initialization of data files
         timestamp = str(int(time.time()))
         self.log_filepath = "log/" + self.config.protocol + "_" + timestamp + ".log"
         self.data_filepath = "data/" + self.config.protocol + "_" + timestamp + ".csv"
 
     @staticmethod
-    def phase1():
-        pass
-
-    @staticmethod
-    def phase2():
-        pass
-    
-    @staticmethod
-    def phase3():
-        pass
-
-    @staticmethod
     def end_simulator(self):
         self.blockchain.write_datafile(self.data_filepath)
-        
+
+
+def main():
+    s = Simulator(10,1,"bitcoin")
+    s.run()
+
+if __name__ == '__main__':
+    main()

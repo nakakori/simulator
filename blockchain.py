@@ -1,6 +1,8 @@
 import csv
 
-class Blockchain:
+from abc import ABCMeta, abstractmethod
+
+class Blockchain():
     def __init__(self):
         self.blocks = []
         self.latest_block = None
@@ -19,7 +21,7 @@ class Blockchain:
                 writer.writerow(block.id, block.miner_id, block.difficulty, block.prev_block)
     
   
-class Block:
+class Block():
     def __init__(self, id, miner_id, difficulty, prev_block):
         self.id = id
         self.miner = miner_id
@@ -27,7 +29,7 @@ class Block:
         self.prev_block = prev_block
 
 
-class Miner:
+class Miner():
     def __init__(self, id, hashrate, blockchain, difficulty=1):
         self.id = id
         self.reward = 0
@@ -35,7 +37,7 @@ class Miner:
         self.difficulty = difficulty
         self.blockchain = blockchain
 
-
-class Consensus:
-    def __init__(self, protocol):
-        self.protocol = protocol
+class Consensus(metaclass=ABCMeta):
+    @abstractmethod
+    def run(self, miners):
+        pass
